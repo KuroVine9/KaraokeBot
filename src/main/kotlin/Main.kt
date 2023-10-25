@@ -16,18 +16,19 @@ const val TOKEN_PATH = "resources/token.txt"
 const val SONG_LIST_PATH = "resources/songdata.json"
 const val API_BASE_URL = "https://api.manana.kr/karaoke/"
 const val API_JSON_URL = "tj.json"
+const val SOUP_URL = "https://m.tjmedia.com/tjsong/song_monthNew.asp"
 
-var japanFilter: Boolean = true
 class Main : ListenerAdapter() {
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         when (event.fullCommandName) {
             "ping" -> {
                 val time = System.currentTimeMillis()
                 event.reply("Pong!").setEphemeral(true)
-                    .flatMap { v: InteractionHook? ->
+                    .flatMap { _: InteractionHook? ->
                         event.hook.editOriginalFormat("Pong: %d ms", System.currentTimeMillis() - time)
                     }.queue()
             }
+
             "register" -> register(event)
             "unregister" -> unRegister(event)
             else -> throw IllegalStateException("Unhandled Interaction!")
@@ -41,8 +42,7 @@ fun main() {
         val scan: Scanner = Scanner(File(TOKEN_PATH))
         token = scan.next()
         scan.close()
-    }
-    catch (e: IOException) {
+    } catch (e: IOException) {
         throw RuntimeException(e)
     }
     println("TOKEN=$token")
