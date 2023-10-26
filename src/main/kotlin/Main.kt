@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.InteractionHook
 import net.dv8tion.jda.api.interactions.commands.build.Commands
+import net.dv8tion.jda.api.interactions.components.buttons.Button
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -27,6 +28,14 @@ class Main : ListenerAdapter() {
                     .flatMap { _: InteractionHook? ->
                         event.hook.editOriginalFormat("Pong: %d ms", System.currentTimeMillis() - time)
                     }.queue()
+            }
+
+            "info" -> {
+                event.reply("Source Code is here!").addActionRow(
+                    Button.link(
+                        "https://github.com/KuroVine9/KaraokeBot", "Github"
+                    )
+                ).queue()
             }
 
             "register" -> register(event)
@@ -54,6 +63,7 @@ fun main() {
 
     JDA.updateCommands().apply {
         addCommands(Commands.slash("ping", "calc ping time of the bot"))
+        addCommands(Commands.slash("info", "봇의 정보를 확인합니다."))
         addCommands(Commands.slash("register", "이 채널에서 업데이트 정보를 받습니다."))
         addCommands(Commands.slash("unregister", "더이상 업데이트 정보를 받지 않습니다."))
     }.queue()
